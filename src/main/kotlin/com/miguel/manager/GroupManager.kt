@@ -40,9 +40,13 @@ object GroupManager {
             if (Bukkit.getPlayer(t.uuid) != null) {
                 val player = Bukkit.getPlayer(t.uuid)
 
-                PermissionManager.getAttachment(player).setPermission(permission, true)
+                if (player != null) {
+                    PermissionManager.getAttachment(player)?.setPermission(permission, true)
 
-                player.recalculatePermissions()
+                    player.recalculatePermissions()
+                }
+
+
             }
         }
 
@@ -73,9 +77,11 @@ object GroupManager {
             if (Bukkit.getPlayer(t.uuid) != null) {
                 val player = Bukkit.getPlayer(t.uuid)
 
-                PermissionManager.getAttachment(player).unsetPermission(permission)
+                if (player != null) {
+                    PermissionManager.getAttachment(player).unsetPermission(permission)
 
-                player.recalculatePermissions()
+                    player.recalculatePermissions()
+                }
             }
         }
 

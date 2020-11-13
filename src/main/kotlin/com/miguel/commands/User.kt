@@ -7,6 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.command.defaults.BukkitCommand
 import org.bukkit.entity.Player
+import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,14 +23,15 @@ class User : BukkitCommand("user") {
             if (strings.size == 3 || strings.size == 2) {
                 val s = strings[0]
 
-                var targetPlayer: UUID? = null
+                val targetPlayer: UUID?
 
-                if (Bukkit.getPlayer(s) != null) {
-                    targetPlayer = Bukkit.getPlayer(s).uniqueId
+                targetPlayer = if (Bukkit.getPlayer(s) != null) {
+                    Bukkit.getPlayer(s)?.uniqueId
                 } else {
                     try {
-                        targetPlayer = UUIDFetcher.getUUID(s)
+                        UUIDFetcher.getUUID(s)
                     } catch (e: Exception) {
+                        UUID.nameUUIDFromBytes("OfflinePlayer:${s}".toByteArray(StandardCharsets.UTF_8))
                     }
                 }
 
@@ -147,7 +149,7 @@ class User : BukkitCommand("user") {
                     allPlayers.forEach { user ->
                         val uuid = user.uuid.toString().replace("-", "")
                         if (Bukkit.getPlayer(user.uuid) != null) {
-                            sender.sendMessage(" §a- §f${Bukkit.getPlayer(user.uuid).name} §e- §f$uuid")
+                            sender.sendMessage(" §a- §f${Bukkit.getPlayer(user.uuid)?.name} §e- §f$uuid")
                         } else {
                             sender.sendMessage(" §a- §f$uuid")
                         }

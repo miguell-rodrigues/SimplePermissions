@@ -24,7 +24,8 @@ object JsonConfig {
 
             FileUtils.writeStringToFile(
                 players,
-                gson.toJson(player)
+                gson.toJson(player),
+                    "UTF-8"
             )
         }
 
@@ -35,7 +36,8 @@ object JsonConfig {
 
             FileUtils.writeStringToFile(
                 groups,
-                gson.toJson(group)
+                gson.toJson(group),
+                    "UTF-8"
             )
         }
     }

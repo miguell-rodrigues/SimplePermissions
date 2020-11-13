@@ -10,8 +10,8 @@ import org.bukkit.entity.Player
 import java.util.*
 
 class Group : BukkitCommand("group") {
-    override fun execute(sender: CommandSender, label: String?, strings: Array<out String>): Boolean {
 
+    override fun execute(sender: CommandSender, label: String, strings: Array<out String>): Boolean {
         if (sender is Player) {
             if (!sender.hasPermission("*") && !sender.isOp)
                 return true
@@ -19,7 +19,7 @@ class Group : BukkitCommand("group") {
 
         if (strings.isEmpty()) {
             sender.sendMessage("§c/group [name] [add, remove] [player | permission]")
-            sender.sendMessage("§c/group [name] [create | list | members | permissions | delete]")
+            sender.sendMessage("§c/group [name] [create | members | permissions | delete]")
             sender.sendMessage("§c/group [list]")
         } else {
             val s = strings[0]
@@ -66,10 +66,10 @@ class Group : BukkitCommand("group") {
                                 sender.sendMessage(" ")
 
                                 groupPlayers.forEach { permissiblePlayer ->
-                                    val name: String = if (Bukkit.getPlayer(permissiblePlayer.uuid) == null) {
+                                    val name: String? = if (Bukkit.getPlayer(permissiblePlayer.uuid) == null) {
                                         permissiblePlayer.uuid.toString().replace("-", "")
                                     } else {
-                                        Bukkit.getPlayer(permissiblePlayer.uuid).name
+                                        Bukkit.getPlayer(permissiblePlayer.uuid)?.name
                                     }
 
                                     sender.sendMessage(" §f- §a$name")
@@ -128,7 +128,7 @@ class Group : BukkitCommand("group") {
                     var targetPlayer: UUID? = null
 
                     if (Bukkit.getPlayer(pp) != null) {
-                        targetPlayer = Bukkit.getPlayer(pp).uniqueId
+                        targetPlayer = Bukkit.getPlayer(pp)?.uniqueId
                     } else {
                         try {
                             targetPlayer = UUIDFetcher.getUUID(pp)

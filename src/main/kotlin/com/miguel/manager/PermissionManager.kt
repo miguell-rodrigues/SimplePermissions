@@ -85,7 +85,7 @@ object PermissionManager {
      */
     fun uninject(player: Player) {
         if (player.uniqueId in permissionMap) {
-            player.removeAttachment(permissionMap[player.uniqueId])
+            permissionMap[player.uniqueId]?.let { player.removeAttachment(it) }
             permissionMap.remove(player.uniqueId)
         }
     }

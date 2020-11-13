@@ -12,7 +12,7 @@ object PlayerManager {
         val result = permissiblePlayer.addPermission(permission)
 
         if (Bukkit.getPlayer(uuid) != null) {
-            val player = Bukkit.getPlayer(uuid)
+            val player = Bukkit.getPlayer(uuid)!!
 
             val attachment = PermissionManager.getAttachment(player)
 
@@ -34,7 +34,7 @@ object PlayerManager {
         val result = permissiblePlayer.removePermission(permission)
 
         if (Bukkit.getPlayer(uuid) != null) {
-            val player = Bukkit.getPlayer(uuid)
+            val player = Bukkit.getPlayer(uuid)!!
 
             val attachment = PermissionManager.getAttachment(player)
 
