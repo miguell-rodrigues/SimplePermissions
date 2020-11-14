@@ -44,7 +44,7 @@ object JsonConfig {
 
     private fun addPermission(uuid: UUID, permission: String) {
         if (playerExist(uuid)) {
-            val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+            val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
             players.forEach { t ->
                 val id = UUID.fromString(t.asJsonObject["uuid"].asString)
@@ -68,7 +68,7 @@ object JsonConfig {
 
     private fun changeGroup(uuid: UUID, group: String) {
         if (playerExist(uuid)) {
-            val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+            val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
             players.forEach { t ->
                 val id = UUID.fromString(t.asJsonObject["uuid"].asString)
@@ -86,7 +86,7 @@ object JsonConfig {
 
     private fun removePermission(uuid: UUID, permission: String) {
         if (playerExist(uuid)) {
-            val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+            val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
             players.forEach { t ->
                 val id = UUID.fromString(t.asJsonObject["uuid"].asString)
@@ -110,7 +110,7 @@ object JsonConfig {
 
     private fun addPermission(group: String, permission: String) {
         if (groupExist(group)) {
-            val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+            val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
             groups.forEach { t ->
                 val name = t.asJsonObject["name"].asString
@@ -134,7 +134,7 @@ object JsonConfig {
 
     private fun removePermission(group: String, permission: String) {
         if (groupExist(group)) {
-            val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+            val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
             groups.forEach { t ->
                 val name = t.asJsonObject["name"].asString
@@ -157,7 +157,7 @@ object JsonConfig {
     }
 
     fun createGroup(permissibleGroup: PermissibleGroup) {
-        val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+        val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
         val name = permissibleGroup.name
 
@@ -166,14 +166,14 @@ object JsonConfig {
                 val storedPermissions = getPermissions(name)
                 val permissions = permissibleGroup.getPermissions()
 
-                storedPermissions.forEach { permission ->
-                    if (permission !in permissions) {
-                        removePermission(name, permission)
+                storedPermissions.forEach { p ->
+                    if (p !in permissions) {
+                        removePermission(name, p)
                     }
                 }
 
-                permissions.forEach { permission ->
-                    addPermission(name, permission)
+                permissions.forEach { p ->
+                    addPermission(name, p)
                 }
 
                 addPermission(name, permission)
@@ -189,7 +189,7 @@ object JsonConfig {
 
     fun deleteGroup(permissibleGroup: PermissibleGroup) {
         if (groupExist(permissibleGroup.name)) {
-            val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+            val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
             groups.forEach { t ->
                 val name = t.asJsonObject["name"].asString
@@ -204,7 +204,7 @@ object JsonConfig {
     }
 
     fun createPlayer(permissiblePlayer: PermissiblePlayer) {
-        val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+        val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
         val uuid = permissiblePlayer.uuid
 
@@ -233,7 +233,7 @@ object JsonConfig {
     }
 
     private fun playerExist(uuid: UUID): Boolean {
-        val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+        val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
         players.forEach { id ->
             val uniqueId = UUID.fromString(id.asJsonObject["uuid"].asString)
@@ -247,7 +247,7 @@ object JsonConfig {
     }
 
     private fun groupExist(name: String): Boolean {
-        val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+        val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
         groups.forEach { t ->
             val nm = t.asJsonObject["name"].asString
@@ -263,7 +263,7 @@ object JsonConfig {
     fun getAllPlayers(): MutableList<PermissiblePlayer> {
         val list: MutableList<PermissiblePlayer> = ArrayList()
 
-        val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+        val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
         players.forEach { t ->
             list.add(gson.fromJson(t, PermissiblePlayer::class.java))
@@ -276,7 +276,7 @@ object JsonConfig {
         val list: MutableList<String> = ArrayList()
 
         if (playerExist(uuid)) {
-            val players = JsonParser().parse(FileUtils.readFileToString(players)).asJsonArray
+            val players = JsonParser().parse(FileUtils.readFileToString(players, "UTF-8")).asJsonArray
 
             players.forEach { t ->
                 val id = UUID.fromString(t.asJsonObject["uuid"].asString)
@@ -300,7 +300,7 @@ object JsonConfig {
         val list: MutableList<String> = ArrayList()
 
         if (groupExist(group)) {
-            val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+            val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
             groups.forEach { t ->
                 val name = t.asJsonObject["name"].asString
@@ -323,7 +323,7 @@ object JsonConfig {
     fun getAllGroups(): MutableList<PermissibleGroup> {
         val list: MutableList<PermissibleGroup> = ArrayList()
 
-        val groups = JsonParser().parse(FileUtils.readFileToString(groups)).asJsonArray
+        val groups = JsonParser().parse(FileUtils.readFileToString(groups, "UTF-8")).asJsonArray
 
         groups.forEach { t ->
             list.add(gson.fromJson(t, PermissibleGroup::class.java))
@@ -335,7 +335,8 @@ object JsonConfig {
     private fun write(file: File, element: JsonElement) {
         FileUtils.writeStringToFile(
             file,
-            gson.toJson(element)
+            gson.toJson(element),
+                "UTF-8"
         )
     }
 }

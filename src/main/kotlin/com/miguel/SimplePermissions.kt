@@ -10,7 +10,7 @@ import com.miguel.manager.GroupManager
 import com.miguel.manager.PermissionManager
 import com.miguel.manager.PlayerManager
 import org.bukkit.Bukkit
-import org.bukkit.craftbukkit.v1_16_R2.CraftServer
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer
 import org.bukkit.plugin.java.JavaPlugin
 
 class SimplePermissions : JavaPlugin() {

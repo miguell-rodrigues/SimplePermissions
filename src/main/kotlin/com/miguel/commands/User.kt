@@ -23,7 +23,7 @@ class User : BukkitCommand("user") {
             if (strings.size == 3 || strings.size == 2) {
                 val s = strings[0]
 
-                val targetPlayer: UUID?
+                var targetPlayer: UUID?
 
                 targetPlayer = if (Bukkit.getPlayer(s) != null) {
                     Bukkit.getPlayer(s)?.uniqueId
@@ -31,8 +31,12 @@ class User : BukkitCommand("user") {
                     try {
                         UUIDFetcher.getUUID(s)
                     } catch (e: Exception) {
-                        UUID.nameUUIDFromBytes("OfflinePlayer:${s}".toByteArray(StandardCharsets.UTF_8))
+                        null
                     }
+                }
+
+                if (targetPlayer == null) {
+                    targetPlayer = UUID.nameUUIDFromBytes("OfflinePlayer:${s}".toByteArray(StandardCharsets.UTF_8))
                 }
 
                 var permission = if (strings.size == 3) strings[2] else ""
